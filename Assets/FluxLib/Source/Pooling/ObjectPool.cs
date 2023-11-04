@@ -22,10 +22,19 @@ namespace FluxLib.Source.Pooling
         private readonly ObjectInitializationMode _objectInitializationMode;
         private readonly bool _allowResize;
 
+        /// <summary>
+        /// Create a new pool with default settings.
+        /// </summary>
         public ObjectPool() : this(ObjectInitializationMode.Eager, true, DefaultMaxSize)
         {
         }
 
+        /// <summary>
+        /// Creates a new pool.
+        /// </summary>
+        /// <param name="objectInitializationMode">How the objects in the pool should be initialized.</param>
+        /// <param name="allowResize">Whether the pool should resize when it is full.</param>
+        /// <param name="maxSize">The maximum amount of objects that the pool can hold.</param>
         public ObjectPool(ObjectInitializationMode objectInitializationMode, bool allowResize, int maxSize)
         {
             _objectInitializationMode = objectInitializationMode;
@@ -38,6 +47,12 @@ namespace FluxLib.Source.Pooling
             }
         }
 
+        /// <summary>
+        /// Retrieves an object from the pool.
+        /// </summary>
+        /// <returns>An object from the pool.</returns>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        /// <exception cref="PoolOverflowException"></exception>
         public T Get()
         {
             if (_pool.Count > 0)
@@ -77,6 +92,11 @@ namespace FluxLib.Source.Pooling
             throw new PoolOverflowException();
         }
 
+        /// <summary>
+        /// Releases an object back into the pool.
+        /// </summary>
+        /// <param name="pooledObject">The object to release.</param>
+        /// <exception cref="PoolOverflowException"></exception>
         public void Release(T pooledObject)
         {
             if (_pool.Count == MaxSize)
